@@ -12,6 +12,12 @@ const Search = ({ onSearchChange }) => {
     )
       .then((response) => response.json())
       .then((response) => {
+        console.log("Response:", response);
+
+        if (!response || !Array.isArray(response.data)) {
+          throw new Error("Invalid response format");
+        }
+
         return {
           options: response.data.map((city) => {
             return {
@@ -21,7 +27,10 @@ const Search = ({ onSearchChange }) => {
           }),
         };
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error("Error:", err);
+        throw err;
+      });
   };
 
   const handleOnChange = (searchData) => {
